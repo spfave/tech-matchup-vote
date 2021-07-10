@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_MATCHUPS = gql`
-  query getMatchUps {
+  query getMatchups {
     matchups {
       _id
       tech1
@@ -13,7 +13,7 @@ export const QUERY_MATCHUPS = gql`
 `;
 
 export const QUERY_MATCHUP = gql`
-  query getMatchUp($matchupID: ID!) {
+  query getMatchup($matchupID: ID!) {
     matchup(matchupID: $matchupID) {
       _id
       tech1

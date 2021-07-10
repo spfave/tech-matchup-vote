@@ -17,7 +17,7 @@ const resolvers = {
 
   Mutation: {
     addMatchup: async (parent, { matchupData }) => {
-      return Matchup.create({ matchData });
+      return Matchup.create({ matchupData });
     },
 
     addVote: async (parent, { matchupID, techNum }) => {
