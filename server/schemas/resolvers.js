@@ -2,7 +2,7 @@ const { Tech, Matchup } = require('../models');
 
 const resolvers = {
   Query: {
-    allTech: async () => {
+    tech: async () => {
       return Tech.find();
     },
 
@@ -16,13 +16,13 @@ const resolvers = {
   },
 
   Mutation: {
-    addMatchup: async (parent, { matchupData }) => {
-      return Matchup.create({ matchupData });
+    addMatchup: async (parent, matchupData) => {
+      return await Matchup.create(matchupData);
     },
 
-    addVote: async (parent, { matchupID, techNum }) => {
-      return Matchup.findOneAndUpdate(
-        { _id: matchupID },
+    addVote: async (parent, { _id, techNum }) => {
+      return await Matchup.findOneAndUpdate(
+        { _id },
         { $inc: { [`tech${techNum}_votes`]: 1 } },
         { new: true }
       );
