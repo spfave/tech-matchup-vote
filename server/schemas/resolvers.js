@@ -10,8 +10,8 @@ const resolvers = {
       return Matchup.find();
     },
 
-    matchup: async (parent, { matchupID }) => {
-      return Matchup.findOne({ _id: matchupID });
+    matchup: async (parent, { _id }) => {
+      return Matchup.findOne({ _id });
     },
   },
 

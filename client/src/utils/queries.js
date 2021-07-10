@@ -13,8 +13,8 @@ export const QUERY_MATCHUPS = gql`
 `;
 
 export const QUERY_MATCHUP = gql`
-  query matchup($matchupID: ID!) {
-    matchup(matchupID: $matchupID) {
+  query matchup($_id: String!) {
+    matchup(_id: $_id) {
       _id
       tech1
       tech2

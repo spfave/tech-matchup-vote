@@ -10,10 +10,14 @@ export const ADD_MATCHUP = gql`
   }
 `;
 
-// export const ADD_VOTE = gql`
-//   mutation addVote($matchupID: ID!, $techNum: Int!) {
-//     addVote(matchupID: $matchupID, techNum: $techNum) {
-
-//     }
-//   }
-// `;
+export const ADD_VOTE = gql`
+  mutation addVote($_id: String!, $techNum: Int!) {
+    addVote(_id: $_id, techNum: $techNum) {
+      _id
+      tech1
+      tech2
+      tech1_votes
+      tech2_votes
+    }
+  }
+`;

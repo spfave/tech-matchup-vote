@@ -17,7 +17,7 @@ const typeDefs = gql`
   type Query {
     tech: [Tech]!
     matchups: [Matchup]
-    matchup(matchupID: ID!): Matchup
+    matchup(_id: String!): Matchup
   }
 
   type Mutation {
