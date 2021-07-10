@@ -16,13 +16,17 @@ const typeDefs = gql`
 
   type Query {
     allTech: [Tech]!
-    matchup(matchupID: ID!): Matchup
     matchups: [Matchup]
+    matchup(matchupID: ID!): Matchup
   }
 
   type Mutation {
-    addMatchup(tech1: String!, tech2: String!): Matchup
-    addVote(matchupID: ID!, techNum: Int!): Matchup
+    addMatchup(
+      matchupData: {tech1: String!, tech2: String!}
+    ): Matchup
+    addVote(
+      voteData: {matchupID: ID!, techNum: Int!}
+    ): Matchup
   }
 `;
 
