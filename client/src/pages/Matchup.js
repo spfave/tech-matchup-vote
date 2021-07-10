@@ -1,30 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { getAllTech, createMatchup } from '../utils/api';
+import { useMutation, useQuery } from '@apollo/client';
+import { QUERY_TECH } from '../utils/queries';
+import { ADD_MATCHUP } from '../utils/mutations';
+// import { getAllTech, createMatchup } from '../utils/api';
 
 const Matchup = () => {
-  const [techList, setTechList] = useState([]);
+  const { loading, data } = useQuery(QUERY_TECH);
+  const techList = data?.tech || [];
+
+  // const [techList, setTechList] = useState([]);
   const [formData, setFormData] = useState({
     tech1: 'JavaScript',
     tech2: 'JavaScript',
   });
   let history = useHistory();
 
-  useEffect(() => {
-    const getTechList = async () => {
-      try {
-        const res = await getAllTech();
-        if (!res.ok) {
-          throw new Error('No list of technologies');
-        }
-        const techList = await res.json();
-        setTechList(techList);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getTechList();
-  }, []);
+  const [addMatchup, { error }] = useMutation(ADD_MATCHUP);
+
+  // useEffect(() => {
+  //   const getTechList = async () => {
+  //     try {
+  //       const res = await getAllTech();
+  //       if (!res.ok) {
+  //         throw new Error('No list of technologies');
+  //       }
+  //       const techList = await res.json();
+  //       setTechList(techList);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  //   getTechList();
+  // }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -35,15 +43,17 @@ const Matchup = () => {
     event.preventDefault();
 
     try {
-      const res = await createMatchup(formData);
+      const { data } = await addMatchup({ variables: { ...formData } });
+      history.push(`/matchup/${data.addMatchup._id}`);
 
-      if (!res.ok) {
-        throw new Error('something went wrong!');
-      }
+      // const res = await createMatchup(formData);
+      // if (!res.ok) {
+      //   throw new Error('something went wrong!');
+      // }
 
-      const matchup = await res.json();
-      console.log(matchup);
-      history.push(`/matchup/${matchup._id}`);
+      // const matchup = await res.json();
+      // console.log(matchup);
+      // history.push(`/matchup/${matchup._id}`);
     } catch (err) {
       console.error(err);
     }
@@ -55,37 +65,43 @@ const Matchup = () => {
   };
 
   return (
-    <div className="card bg-white card-rounded w-25">
-      <div className="card-header bg-dark text-center">
+    <div className='card bg-white card-rounded w-25'>
+      <div className='card-header bg-dark text-center'>
         <h1>Let's create a matchup!</h1>
       </div>
-      <div className="card-body m-5">
-        <form onSubmit={handleFormSubmit}>
-          <label>Tech 1: </label>
-          <select name="tech1" onChange={handleInputChange}>
-            {techList.map((tech) => {
-              return (
-                <option key={tech._id} value={tech.name}>
-                  {tech.name}
-                </option>
-              );
-            })}
-          </select>
-          <label>Tech 2: </label>
-          <select name="tech2" onChange={handleInputChange}>
-            {techList.map((tech) => {
-              return (
-                <option key={tech._id} value={tech.name}>
-                  {tech.name}
-                </option>
-              );
-            })}
-          </select>
-          <button className="btn btn-danger" type="submit">
-            Create Matchup!
-          </button>
-        </form>
+
+      <div className='card-body m-5'>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <form onSubmit={handleFormSubmit}>
+            <label>Tech 1: </label>
+            <select name='tech1' onChange={handleInputChange}>
+              {techList.map((tech) => {
+                return (
+                  <option key={tech._id} value={tech.name}>
+                    {tech.name}
+                  </option>
+                );
+              })}
+            </select>
+            <label>Tech 2: </label>
+            <select name='tech2' onChange={handleInputChange}>
+              {techList.map((tech) => {
+                return (
+                  <option key={tech._id} value={tech.name}>
+                    {tech.name}
+                  </option>
+                );
+              })}
+            </select>
+            <button className='btn btn-danger' type='submit'>
+              Create Matchup!
+            </button>
+          </form>
+        )}
       </div>
+      {error && <div>Something went wrong...</div>}
     </div>
   );
 };

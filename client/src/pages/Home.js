@@ -6,7 +6,9 @@ import { QUERY_MATCHUPS } from '../utils/queries';
 
 const Home = () => {
   // GraphQL
-  const { loading, data } = useQuery(QUERY_MATCHUPS);
+  const { loading, data } = useQuery(QUERY_MATCHUPS, {
+    fetchPolicy: 'no-cache',
+  });
   const matchupList = data?.matchups || [];
 
   // REST API
