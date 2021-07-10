@@ -10,6 +10,7 @@ module.exports = {
 
     res.status(200).json(matchup);
   },
+
   async createVote(req, res) {
     const vote = await Matchup.findOneAndUpdate(
       { _id: req.body.id },
@@ -23,6 +24,7 @@ module.exports = {
 
     res.status(200).json(vote);
   },
+
   async getAllMatchups(req, res) {
     const allMatchups = await Matchup.find({});
 
@@ -32,6 +34,7 @@ module.exports = {
 
     res.status(200).json(allMatchups);
   },
+
   async getMatchup({ params }, res) {
     const matchup = await Matchup.findOne({ _id: params.id });
 
